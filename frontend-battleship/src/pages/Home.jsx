@@ -1,19 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import shipImage from '../assets/ship.png'; // Make sure the image is saved here
+import Navbar from '../components/Navbar';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-sky-900 text-white font-sans">
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-8 py-6">
-        <h1 className="text-2xl font-bold">Battleship</h1>
-        <ul className="flex space-x-8 font-semibold text-white text-lg">
-          <li><Link to="/" className="hover:underline">Homepage</Link></li>
-          <li><Link to="/rules" className="hover:underline">Game Rules</Link></li>
-          <li><Link to="/about" className="hover:underline">About Us</Link></li>
-        </ul>
-      </nav>
+      <Navbar/>
 
       {/* Hero section */}
       <div className="flex flex-col md:flex-row justify-between items-center px-10 py-10">
