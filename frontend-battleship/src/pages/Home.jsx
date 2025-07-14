@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import shipImage from '../assets/ship.png';
 import Navbar from '../components/Navbar';
+import { useState } from 'react';
 
 export default function Home() {
   const [showPlayOptions, setShowPlayOptions] = useState(false);
