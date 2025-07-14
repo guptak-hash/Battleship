@@ -1,13 +1,18 @@
-// frontend-battleship\src\pages\Home.jsx
 import { Link } from 'react-router-dom';
-import shipImage from '../assets/ship.png'; // Make sure the image is saved here
+import shipImage from '../assets/ship.png';
 import Navbar from '../components/Navbar';
 
 export default function Home() {
+  const [showPlayOptions, setShowPlayOptions] = useState(false);
+
+  const togglePlayOptions = () => {
+    setShowPlayOptions(!showPlayOptions);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-sky-900 text-white font-sans">
       {/* Navbar */}
-      <Navbar/>
+      <Navbar />
 
       {/* Hero section */}
       <div className="flex flex-col md:flex-row justify-between items-center px-10 py-10">
@@ -16,15 +21,42 @@ export default function Home() {
           <h2 className="text-lg text-gray-300 font-semibold">Online Game</h2>
           <h1 className="text-6xl md:text-7xl font-extrabold text-white mt-2 mb-6 font-[cursive]">BATTLESHIP</h1>
           <p className="text-md text-gray-200 leading-relaxed">
-            Welcome to the world of online Battleship Game! Dive into epic sea battles, challenge opponents from around the globe, and put your tactical skills to the test. Sink your opponent’s fleet before they sink yours in this classic game of wits and strategy. Prepare for thrilling singleplayer & multiplayer action, right from your browser, as you engage in intense battles on the high seas. Are you ready to command your fleet and dominate the ocean? Set sail and embark on your Battleship adventure today!
+            Welcome to the world of online Battleship Game! Dive into epic sea battles, challenge opponents from around the globe, and put your tactical skills to the test...
           </p>
 
           {/* Buttons */}
-          <div className="mt-8 flex gap-4">
-            {/* <Link to="/login" className="bg-gray-400 hover:bg-gray-500 text-white py-3 px-6 rounded-full shadow-md font-semibold flex items-center gap-2">
+          <div className="mt-8 flex flex-col gap-4">
+            {/* ▶ PLAY NOW button */}
+            <button
+              onClick={togglePlayOptions}
+              className="bg-gray-400 hover:bg-gray-500 text-white py-3 px-6 rounded-full shadow-md font-semibold flex items-center gap-2 w-[15rem]"
+            >
               ▶ PLAY NOW
-            </Link> */}
-            <Link to="/rules" className="border border-white hover:bg-white hover:text-blue-800 py-3 px-6 rounded-full font-semibold flex items-center gap-2">
+            </button>
+
+            {/* Conditional Play Options */}
+            {showPlayOptions && (
+              <div className="flex gap-4 flex-wrap">
+                <Link
+                  to="/singleplayer"
+                  className="bg-blue-700 hover:bg-blue-800 text-white py-2 px-5 rounded-full font-semibold"
+                >
+                  🎯 Single Player
+                </Link>
+                <Link
+                  to="/multiplayer"
+                  className="bg-green-600 hover:bg-green-700 text-white py-2 px-5 rounded-full font-semibold"
+                >
+                  🌐 Multiplayer
+                </Link>
+              </div>
+            )}
+
+            {/* HOW TO PLAY */}
+            <Link
+              to="/rules"
+              className="border border-white hover:bg-white hover:text-blue-800 py-3 px-6 rounded-full font-semibold flex items-center gap-2 w-[15rem]"
+            >
               ❓ HOW TO PLAY
             </Link>
           </div>
@@ -35,7 +67,7 @@ export default function Home() {
           <img
             src={shipImage}
             alt="Battleship"
-            className="w-[800px] max-w-full  mr-36"
+            className="w-[800px] max-w-full mr-36"
           />
         </div>
       </div>
