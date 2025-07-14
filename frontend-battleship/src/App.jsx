@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import GameRules from './pages/GameRules';
 import About from './pages/About';
 import SinglePlayer from './pages/SinglePlayer';
+import GamePage from './pages/GamePage';
 function App() {
   return (
     <Router>
@@ -11,7 +12,7 @@ function App() {
         <Route path='/rules' element={<GameRules/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/singleplayer' element={<SinglePlayer/>}/>
-        {/* <Route path='/singleplayer' element={<div style={{color: 'red'}}>TEST</div>}/> */}
+        <Route path='/game' element={<GamePage/>}/>
       </Routes>
     </Router>
   );

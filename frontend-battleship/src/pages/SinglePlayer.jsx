@@ -1,32 +1,4 @@
 // frontend-battleship\src\pages\SinglePlayer.jsx
-
-// SinglePlayer.jsx - Temporary test version
-// export default function SinglePlayer() {
-//   console.log("SinglePlayer component is rendering"); // Check console
-//   return (
-//      <div className="min-h-screen bg-gradient-to-br from-blue-900 to-sky-900"> {/* Add Tailwind classes */}
-//        <h1 className="text-6xl md:text-7xl font-extrabold text-white mt-2 mb-6 font-[cursive]">BATTLESHIP GAME</h1>
-//        <h2 className="text-4xl md:text-4xl font-extrabold text-white mt-2 mb-6 font-[cursive]">SINGLE PLAYER</h2>
-//        <div>
-//         <img
-//         src="frontend-battleship\src\assets\user1.png"
-//         alt="user-logo"
-//         />
-//         <span>V/S</span>
-//         <img
-//         src="frontend-battleship\src\assets\bot.png"
-//         alt="bot-logo"
-//         />
-//        </div>
-//     </div>
-//   )
-// }
-
-
-
-
-
-
 export default function SinglePlayer() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-sky-900 p-4 flex flex-col items-center">

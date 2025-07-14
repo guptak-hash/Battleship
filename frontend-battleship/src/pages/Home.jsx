@@ -1,3 +1,4 @@
+// frontend-battleship\src\pages\Home.jsx
 import { Link } from 'react-router-dom';
 import shipImage from '../assets/ship.png'; // Make sure the image is saved here
 import Navbar from '../components/Navbar';
