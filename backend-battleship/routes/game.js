@@ -117,14 +117,11 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Get user game history (only final results)
-router.get('/history', auth, async (req, res) => {
+router.get('/stats', auth, async (req, res) => {
   try {
-    const games = await Game.find({ player: req.user._id })
-      .sort({ datePlayed: -1 })
-      .limit(10)
-      .select('result duration datePlayed -_id');
-      
-    res.send(games);
+    const user = await User.find({ _id: req.user._id })
+      console.log('user >> ',user)
+    res.json({user})
   } catch (err) {
     res.status(500).send(err);
   }

@@ -15,21 +15,13 @@ export default function Profile() {
             // Fetch user stats
             axios.get('/api/games/stats')
                 .then(res => {
-                    setStats(res.data);
+                    console.log(res.data.user[0].stats)
+                    setStats({...res.data.user[0].stats});
                 })
                 .catch(err => {
                     console.error('Error fetching stats:', err);
                 });
 
-            // Fetch game history
-            axios.get('/api/games/history')
-                .then(res => {
-                    setGameHistory(res.data);
-                })
-                .catch(err => {
-                    console.error('Error fetching game history:', err);
-                })
-                .finally(() => setLoading(false));
         }
     }, [user]);
 
