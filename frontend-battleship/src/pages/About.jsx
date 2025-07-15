@@ -4,24 +4,19 @@ import { FaGithub } from 'react-icons/fa';
 
 const developers = [
   {
-    name: "Alexandros Oikonomou",
-    image: "/img/alex.jpg",
-    github: "https://github.com/alexoiik",
+    name: "Kishan Gupta",
+    image: "frontend-battleship\src\assets\Images\Kishan_Gupta.png",
+    github: "https://github.com/guptak-hash",
   },
   {
-    name: "Vasilios Mourtzios",
-    image: "/img/billy.jpg",
-    github: "https://github.com/ssjbillys",
+    name: "Saurabh Kumar",
+    image: "frontend-battleship\src\assets\Images\saurabhKumar.jpeg",
+    github: "https://github.com/ssjbillysbh",
   },
   {
-    name: "Stylianos Panagiotopoulos",
+    name: "Jagan Mohan Reddy",
     image: "/img/stelios.jpg",
-    github: "https://github.com/steliospanag01",
-  },
-  {
-    name: "Kostas Kyriakos Batsios",
-    image: "/img/kostas.jpg",
-    github: "https://github.com/KostasKyriakosBatsios",
+    github: "https://github.com/steliospanag01kjhku",
   },
 ];
 
@@ -35,13 +30,10 @@ function About() {
         <h1 className="text-4xl font-bold mb-6">DEVELOPERS</h1>
         
         <p className="mb-10 leading-relaxed">
-          We are 4 young undergraduate students with a passion for gaming and web development 
-          that teamed up to create an innovative web game. This game is a strong full-stack
-          project and created for our university's course "Development of Web Systems and Applications" 
-          at the department of{" "}
-          <a href="https://www.iee.ihu.gr/en/" className="text-sky-300 underline" target="_blank" rel="noreferrer">
-            IEE
-          </a>. Together, our collaboration resulted in a captivating, enjoyable and user-friendly{" "}
+          We are 3 young Masai School students with a passion for web development 
+          that teamed up to create an innovative web game. This game is a MERN full-stack
+          project.
+         . Together, our collaboration resulted in a captivating, enjoyable and user-friendly{" "}
           <a href="/" className="text-sky-300 underline" target="_blank" rel="noreferrer">
             Online Battleship Game!
           </a>

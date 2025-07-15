@@ -16,7 +16,8 @@ export default function Profile() {
             axios.get('/api/games/stats')
                 .then(res => {
                     console.log(res.data.user[0].stats)
-                    setStats({...res.data.user[0].stats});
+                    setStats(res.data.user[0].stats);
+                    setLoading(false)
                 })
                 .catch(err => {
                     console.error('Error fetching stats:', err);
@@ -97,49 +98,7 @@ export default function Profile() {
                     </div>
                 </div>
 
-                {/* Game History */}
-                {/* <div className="mt-8 bg-blue-800/40 p-6 rounded-xl backdrop-blur-sm border border-cyan-400/20 shadow-lg">
-                    <h2 className="text-3xl font-bold mb-6">Recent Games</h2>
-                    {loading ? (
-                        <p>Loading game history...</p>
-                    ) : gameHistory.length > 0 ? (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="text-left border-b border-cyan-400/30">
-                                        <th className="pb-2">Date</th>
-                                        <th className="pb-2">Opponent</th>
-                                        <th className="pb-2">Result</th>
-                                        <th className="pb-2">Hits</th>
-                                        <th className="pb-2">Misses</th>
-                                        <th className="pb-2">Duration</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {gameHistory.map((game, index) => (
-                                        <tr key={index} className="border-b border-cyan-400/10 hover:bg-blue-900/30">
-                                            <td className="py-3">{new Date(game.datePlayed).toLocaleString()}</td>
-                                            <td>{game.opponentType === 'computer' ? 'Computer' : 'Human'}</td>
-                                            <td>
-                                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${game.result === 'win' ? 'bg-green-500/30 text-green-300' :
-                                                        game.result === 'loss' ? 'bg-red-500/30 text-red-300' :
-                                                            'bg-gray-500/30 text-gray-300'
-                                                    }`}>
-                                                    {game.result}
-                                                </span>
-                                            </td>
-                                            <td>{game.playerHits}</td>
-                                            <td>{game.playerMisses}</td>
-                                            <td>{Math.floor(game.duration / 60)}m {game.duration % 60}s</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <p>No game history yet</p>
-                    )}
-                </div> */}
+               
             </div>
         </div>
     );
