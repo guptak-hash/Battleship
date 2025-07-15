@@ -3,21 +3,22 @@ import Navbar from '../components/Navbar';
 import { FaGithub } from 'react-icons/fa';
 import KishanImage from '../assets/Images/Kishan_Gupta.png'
 import SaurabhImage from '../assets/Images/saurabhKumar.jpeg'
+import Jagan from '../assets/Images/jagan.png'
 const developers = [
   {
     name: "Kishan Gupta",
-    image: "frontend-battleship\src\assets\Images\Kishan_Gupta.png",
+    image: KishanImage,
     github: "https://github.com/guptak-hash",
   },
   {
     name: "Saurabh Kumar",
-    image: "frontend-battleship\src\assets\Images\saurabhKumar.jpeg",
-    github: "https://github.com/ssjbillysbh",
+    image: SaurabhImage,
+    github: "https://github.com/ksaurabh252",
   },
   {
     name: "Jagan Mohan Reddy",
-    image: "/img/stelios.jpg",
-    github: "https://github.com/steliospanag01kjhku",
+    image: Jagan,
+    github: "https://github.com/jagan-238",
   },
 
 ];

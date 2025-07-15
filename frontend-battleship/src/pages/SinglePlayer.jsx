@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import user1 from "../assets/user1.png";
+import bot from "../assets/bot.png";
 
 // frontend-battleship\src\pages\SinglePlayer.jsx
 export default function SinglePlayer() {
@@ -21,7 +23,7 @@ export default function SinglePlayer() {
         {/* Player Card */}
         <div className="flex flex-col items-center bg-blue-800/40 p-6 rounded-xl backdrop-blur-sm border border-cyan-400/20 shadow-lg shadow-blue-500/10 w-full max-w-xs">
           <img 
-            src="/assets/user1.png" 
+            src={user1} 
             alt="Player" 
             className="w-32 h-32 object-contain mb-4 drop-shadow-lg"
           />
@@ -42,7 +44,7 @@ export default function SinglePlayer() {
         {/* Bot Card */}
         <div className="flex flex-col items-center bg-blue-800/40 p-6 rounded-xl backdrop-blur-sm border border-cyan-400/20 shadow-lg shadow-blue-500/10 w-full max-w-xs">
           <img 
-            src="frontend-battleship\src\assets\bot.png" 
+            src={bot} 
             alt="Computer" 
             className="w-32 h-32 object-contain mb-4 drop-shadow-lg grayscale hover:grayscale-0 transition-all"
           />
