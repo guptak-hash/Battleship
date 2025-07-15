@@ -1,3 +1,5 @@
+import user1 from "../assets/user1.png";
+import bot from "../assets/bot.png";
 // frontend-battleship\src\pages\SinglePlayer.jsx
 export default function SinglePlayer() {
   return (
@@ -16,9 +18,9 @@ export default function SinglePlayer() {
       <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-12 w-full max-w-4xl">
         {/* Player Card */}
         <div className="flex flex-col items-center bg-blue-800/40 p-6 rounded-xl backdrop-blur-sm border border-cyan-400/20 shadow-lg shadow-blue-500/10 w-full max-w-xs">
-          <img 
-            src="/assets/user1.png" 
-            alt="Player" 
+          <img
+            src={user1}
+            alt="Player"
             className="w-32 h-32 object-contain mb-4 drop-shadow-lg"
           />
           <h3 className="text-2xl font-bold text-white mb-2">YOU</h3>
@@ -37,9 +39,9 @@ export default function SinglePlayer() {
 
         {/* Bot Card */}
         <div className="flex flex-col items-center bg-blue-800/40 p-6 rounded-xl backdrop-blur-sm border border-cyan-400/20 shadow-lg shadow-blue-500/10 w-full max-w-xs">
-          <img 
-            src="frontend-battleship\src\assets\bot.png" 
-            alt="Computer" 
+          <img
+            src={bot}
+            alt="Computer"
             className="w-32 h-32 object-contain mb-4 drop-shadow-lg grayscale hover:grayscale-0 transition-all"
           />
           <h3 className="text-2xl font-bold text-white mb-2">Computer</h3>
