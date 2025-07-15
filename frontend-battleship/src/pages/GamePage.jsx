@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // Ship configurations
 const SHIPS = [
@@ -34,6 +37,9 @@ export default function GamePage() {
   const [message, setMessage] = useState('Place your ships on the board');
   const [playerShipsRemaining, setPlayerShipsRemaining] = useState(17); // Total ship cells
   const [computerShipsRemaining, setComputerShipsRemaining] = useState(17);
+  const [startTime, setStartTime] = useState(null);
+  const { user } = useAuth();
+  const navigate=useNavigate();
 
   // Create empty board
   function createEmptyBoard() {
@@ -74,14 +80,14 @@ export default function GamePage() {
   // Handle player ship placement
   function handleCellClick(row, col) {
     if (gamePhase !== PHASE_SETUP) return;
-    
+
     const currentShip = SHIPS[currentShipIndex];
     if (!currentShip) return;
 
     if (isValidPlacement(playerBoard, row, col, currentShip.length, isHorizontal)) {
       const newBoard = placeShip(playerBoard, row, col, currentShip.length, isHorizontal);
       setPlayerBoard(newBoard);
-      
+
       if (currentShipIndex < SHIPS.length - 1) {
         setCurrentShipIndex(currentShipIndex + 1);
         setMessage(`Place your ${SHIPS[currentShipIndex + 1].name} (${SHIPS[currentShipIndex + 1].length} cells)`);
@@ -101,26 +107,32 @@ export default function GamePage() {
 
     const newPlayerShots = [...playerShots];
     const hit = computerBoard[row][col] === SHIP;
-    
+
     newPlayerShots[row][col] = hit ? HIT : MISS;
     setPlayerShots(newPlayerShots);
 
     if (hit) {
-      setComputerShipsRemaining(prev => prev - 1);
-      setMessage('Hit! Fire again!');
-      
-      if (computerShipsRemaining - 1 === 0) {
+      const newShipsRemaining = playerShipsRemaining - 1;
+      setPlayerShipsRemaining(newShipsRemaining);
+      setMessage('You hit enemy ship!');
+
+      // Add this block - Computer win condition
+      if (newShipsRemaining === 0) {
         setWinner('player');
         setGamePhase(PHASE_GAME_OVER);
         setMessage('Victory! You sank all enemy ships!');
+        saveGameResult('win'); // Only save final result
         return;
       }
-    } else {
-      setMessage('Miss! Computer\'s turn...');
-      setGamePhase(PHASE_COMPUTER_TURN);
+
       setTimeout(computerTurn, 1000);
+    } else {
+      setMessage('You missed! Computer turn!');
+      setGamePhase(PHASE_PLAYER_TURN);
     }
   }
+
+
 
   // Computer's turn
   function computerTurn() {
@@ -132,21 +144,23 @@ export default function GamePage() {
 
     const newComputerShots = [...computerShots];
     const hit = playerBoard[row][col] === SHIP;
-    
+
     newComputerShots[row][col] = hit ? HIT : MISS;
     setComputerShots(newComputerShots);
 
     if (hit) {
-      setPlayerShipsRemaining(prev => prev - 1);
+      const newShipsRemaining = playerShipsRemaining - 1;
+      setPlayerShipsRemaining(newShipsRemaining);
       setMessage('Computer hit your ship!');
-      
-      if (playerShipsRemaining - 1 === 0) {
+
+      if (newShipsRemaining === 0) {
         setWinner('computer');
         setGamePhase(PHASE_GAME_OVER);
         setMessage('Defeat! Computer sank all your ships!');
+        saveGameResult('loss'); // Only save final result
         return;
       }
-      
+
       setTimeout(computerTurn, 1000);
     } else {
       setMessage('Computer missed! Your turn!');
@@ -154,19 +168,26 @@ export default function GamePage() {
     }
   }
 
+  
+
+  // effect to set start time on initial render
+  useEffect(() => {
+    setStartTime(new Date());
+  }, []);
+
   // Generate computer ships
   useEffect(() => {
     let board = createEmptyBoard();
-    
+
     SHIPS.forEach(ship => {
       let placed = false;
       let attempts = 0;
-      
+
       while (!placed && attempts < 100) {
         const row = Math.floor(Math.random() * BOARD_SIZE);
         const col = Math.floor(Math.random() * BOARD_SIZE);
         const horizontal = Math.random() < 0.5;
-        
+
         if (isValidPlacement(board, row, col, ship.length, horizontal)) {
           board = placeShip(board, row, col, ship.length, horizontal);
           placed = true;
@@ -174,14 +195,16 @@ export default function GamePage() {
         attempts++;
       }
     });
-    
+
     setComputerBoard(board);
   }, []);
+
+  
 
   // Get cell display class
   function getCellClass(value, isPlayerBoard = false, shots = null, row = null, col = null) {
     const baseClass = "w-8 h-8 border border-cyan-400/30 cursor-pointer transition-all hover:border-cyan-400 flex items-center justify-center text-xs font-bold";
-    
+
     if (isPlayerBoard) {
       // Player's board
       if (shots && shots[row][col] === HIT) {
@@ -199,7 +222,7 @@ export default function GamePage() {
         return `${baseClass} bg-blue-400 text-white`;
       }
     }
-    
+
     return `${baseClass} bg-blue-900/50 hover:bg-blue-800/70`;
   }
 
@@ -210,7 +233,50 @@ export default function GamePage() {
     return '';
   }
 
-  // Reset game
+  // Add this function to save game results
+  const saveGameResult = async (result) => {
+    if (!user) return; // Don't save if user is not logged in
+
+    const endTime = new Date();
+    const duration = Math.floor((endTime - startTime) / 1000); // in seconds
+
+    // Calculate hits and misses
+    let playerHits = 0;
+    let playerMisses = 0;
+    let opponentHits = 0;
+    let opponentMisses = 0;
+
+    playerShots.forEach(row => {
+      row.forEach(cell => {
+        if (cell === HIT) playerHits++;
+        if (cell === MISS) playerMisses++;
+      });
+    });
+
+    computerShots.forEach(row => {
+      row.forEach(cell => {
+        if (cell === HIT) opponentHits++;
+        if (cell === MISS) opponentMisses++;
+      });
+    });
+
+    try {
+      await axios.post('/api/games', {
+        result,
+        opponentType: 'computer',
+        // playerHits,
+        // playerMisses,
+        // opponentHits,
+        // opponentMisses,
+        duration
+      });
+    } catch (err) {
+      console.error('Error saving game result:', err);
+    }
+  };
+
+
+
   function resetGame() {
     setGamePhase(PHASE_SETUP);
     setPlayerBoard(createEmptyBoard());
@@ -223,8 +289,8 @@ export default function GamePage() {
     setMessage('Place your ships on the board');
     setPlayerShipsRemaining(17);
     setComputerShipsRemaining(17);
+    setStartTime(new Date()); // Set start time when game resets
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-sky-900 text-white p-4">
       {/* Header */}
@@ -246,7 +312,7 @@ export default function GamePage() {
               <p className="text-sm text-gray-300">
                 Placing: {SHIPS[currentShipIndex]?.name} ({SHIPS[currentShipIndex]?.length} cells)
               </p>
-              <button 
+              <button
                 onClick={() => setIsHorizontal(!isHorizontal)}
                 className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 rounded text-sm font-medium"
               >
@@ -276,9 +342,9 @@ export default function GamePage() {
                 ))
               )}
             </div>
-            <div className="text-center">
+            {/* <div className="text-center">
               <p className="text-sm text-cyan-200">Ships Remaining: {playerShipsRemaining}</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -306,33 +372,33 @@ export default function GamePage() {
                 ))
               )}
             </div>
-            <div className="text-center">
+            {/* <div className="text-center">
               <p className="text-sm text-cyan-200">Ships Remaining: {computerShipsRemaining}</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
 
       {/* Game Controls */}
       <div className="flex justify-center gap-4 mb-6">
-        <button 
+        <button
           onClick={resetGame}
           className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg shadow-md hover:shadow-cyan-500/50 transition-all"
         >
           New Game
         </button>
-        <button 
-          onClick={() => window.history.back()}
+        <button
+          onClick={() => navigate('/')}
           className="px-6 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md hover:shadow-blue-500/50 transition-all"
         >
-          Back to Menu
+          Back to Home
         </button>
-        <button 
+        {/* <button
           onClick={() => window.location.href = '/'}
           className="px-6 py-3 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg shadow-md hover:shadow-red-500/50 transition-all"
         >
           Exit
-        </button>
+        </button> */}
       </div>
 
       {/* Game Over Modal */}
@@ -344,13 +410,13 @@ export default function GamePage() {
             </h2>
             <p className="text-xl text-cyan-200 mb-6">{message}</p>
             <div className="flex gap-4 justify-center">
-              <button 
+              <button
                 onClick={resetGame}
                 className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg"
               >
                 Play Again
               </button>
-              <button 
+              <button
                 onClick={() => window.history.back()}
                 className="px-6 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-lg"
               >
@@ -364,7 +430,7 @@ export default function GamePage() {
       {/* Instructions */}
       <div className="text-center">
         <p className="text-blue-300 text-sm opacity-70">
-          {gamePhase === PHASE_SETUP ? 
+          {gamePhase === PHASE_SETUP ?
             'Click on your board to place ships. Use the Horizontal/Vertical button to rotate.' :
             'Click on enemy waters to fire. Hit all enemy ships to win!'
           }
