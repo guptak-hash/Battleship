@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 // frontend-battleship\src\pages\SinglePlayer.jsx
 export default function SinglePlayer() {
+ const navigate=useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-sky-900 p-4 flex flex-col items-center">
       {/* Header Section */}
@@ -53,10 +57,12 @@ export default function SinglePlayer() {
         {/* <button className="px-8 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg shadow-md hover:shadow-cyan-500/50 transition-all">
           New Game
         </button> */}
-        <button className="px-8 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md hover:shadow-blue-500/50 transition-all">
+        <button onClick={()=>navigate('/game')} className="px-8 py-3 bg-blue-700 hover:bg-blue-600 text-white 
+        font-bold rounded-lg shadow-md hover:shadow-blue-500/50 transition-all">
           Start Battle
         </button>
-        <button className="px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg shadow-md hover:shadow-red-500/50 transition-all">
+        <button onClick={()=>navigate('/')} className="px-8 py-3 bg-red-700 hover:bg-red-600 text-white 
+        font-bold rounded-lg shadow-md hover:shadow-red-500/50 transition-all">
           Exit
         </button>
       </div>
